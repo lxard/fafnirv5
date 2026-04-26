@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Detail Produk</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="./js/productF.js"></script>
+
+<style>
+body {
+  background: #020617;
+  color: white;
+}
+
+.thumb {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.thumb.active {
+  opacity: 1;
+  border: 2px solid #6366f1;
+}
+</style>
+</head>
+
+<body class="p-4">
+
+<!-- BACK -->
+<button onclick="history.back()" class="mb-4 text-sm text-gray-400">
+  ← Kembali
+</button>
+
+<div id="content"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get("id"));
+
+const product = products.find(p => p.id === id);
+const container = document.getElementById("content");
+
+if(!product){
+  container.innerHTML = "<p>Produk tidak ditemukan</p>";
+} else {
+
+  container.innerHTML = `
+    <!-- IMAGE -->
+    <div>
+      <img id="mainImage" src="${product.images[0]}" 
+        class="w-full h-60 object-cover rounded-xl">
+
+      <div class="flex gap-2 mt-2 overflow-x-auto">
+        ${product.images.map((img,i)=>`
+          <img src="${img}" 
+            onclick="changeImage('${img}', this)"
+            class="thumb ${i===0?'active':''} w-16 h-16 object-cover rounded">
+        `).join("")}
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="mt-4">
+      <h1 class="text-lg font-semibold">${product.name}</h1>
+
+      <p class="text-indigo-400 text-lg mt-1">
+        Rp ${product.price.toLocaleString()}
+      </p>
+
+      <p class="text-xs mt-2">
+        Kondisi: ${product.condition}
+      </p>
+
+      <p class="text-xs mt-1">
+        Stok: ${product.stock}
+      </p>
+
+      <p class="text-sm text-gray-400 mt-3">
+        ${product.description}
+      </p>
+
+      <button onclick="orderWA('${product.name}', '${product.condition}', ${product.price})"
+        class="mt-4 w-full py-3 rounded-lg bg-indigo-500">
+        Beli via WhatsApp
+      </button>
+    </div>
+  `;
+}
+
+// ganti gambar utama
+function changeImage(src, el){
+  document.getElementById("mainImage").src = src;
+
+  document.querySelectorAll(".thumb").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+}
+
+// WA
+function orderWA(nama, kondisi, harga){
+  const pesan = `
+Halo admin ${STORE.nama} 👋
+
+Saya ingin membeli:
+
+🛍 Produk: ${nama}
+📦 Kondisi: ${kondisi}
+💰 Harga: Rp ${harga.toLocaleString()}
+`;
+
+  window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(pesan)}`);
+}
+</script>
+
+</body>
+</html>
