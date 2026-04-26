@@ -11,7 +11,7 @@ const products = [
       "https://files.catbox.moe/3r0uxh.jpeg",
       "https://files.catbox.moe/3dnv7k.jpeg"
     ],
-    condition: "Ori",
+    condition: "Sec",
     price: 100000,
     description: "Barang second, all normal, minus pemakaian & ct, kelengkapan : Box, Device, Liquid sweet & smooth, Liquid smoozie blueberry candy.",
     stock: 1
